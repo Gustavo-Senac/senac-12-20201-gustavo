@@ -18,28 +18,27 @@ public class ExecutavelExercicio1 {
 		//Buscar e mostrar o endereco 1
 		/*EnderecoDAO endDAO = new EnderecoDAO();
 		Endereco enderecoConsultado = endDAO.consultarPorId(3);
-		System.out.println("Endereço 3: " + enderecoConsultado.toString());*/
+		System.out.println("Endereï¿½o 3: " + enderecoConsultado.toString());*/
 		
 		
-		//TODO exercício 2
-		Cliente cliente1 = obterClienteDaTela();
+		//TODO exercï¿½cio 2
+		//Cliente cliente1 = obterClienteDaTela();
 		Telefone telefone1 = obterTelefoneDaTela();
 		
 		//- Salvar no banco
 		
-		ClienteBO clienteBO = new ClienteBO();
+		/*ClienteBO clienteBO = new ClienteBO();
 		String mensagem = clienteBO.salvar(cliente1);
+		
+		JOptionPane.showMessageDialog(null, mensagem);*/
+		
+		TelefoneBO telefoneBO = new TelefoneBO();
+		String mensagem = telefoneBO.salvar(telefone1);
 		
 		JOptionPane.showMessageDialog(null, mensagem);
 		
-		TelefoneBO telefoneBO = new TelefoneBO();
-		mensagem = telefoneBO.salvar(telefone1);
-		
-		ArrayList<Telefone> telefones = new ArrayList<Telefone>(); 
-		
 	}
-
-
+	
 	private static Cliente obterClienteDaTela() {
 		String nome = JOptionPane.showInputDialog("Informe o nome");
 		String sobrenome = JOptionPane.showInputDialog("Informe o sobrenome");
@@ -50,7 +49,7 @@ public class ExecutavelExercicio1 {
 		
 		Object[] enderecos = listaEnderecos.toArray();
 		Endereco enderecoSelecionado = (Endereco) JOptionPane.showInputDialog(null, 
-				"Selecione um endereço", "Endereço", 
+				"Selecione um endereÃ§o", "EndereÃ§o", 
 				JOptionPane.QUESTION_MESSAGE, 
 				null, enderecos, null);
 
@@ -61,12 +60,29 @@ public class ExecutavelExercicio1 {
 	}
 	
 	private static Telefone obterTelefoneDaTela() {
-		String codigoDoPais = JOptionPane.showInputDialog("Informe o código do país");
+		String codigoDoPais = JOptionPane.showInputDialog("Informe o cÃ³digo do paÃ­s");
 		String ddd = JOptionPane.showInputDialog("Informe o DDD");
-		String numero = JOptionPane.showInputDialog("Informe o número do telefone");
-		int movel = JOptionPane.showConfirmDialog(null, "É um telefone móvel", "Escolha uma opção", JOptionPane.YES_NO_OPTION);
-		int ativo = JOptionPane.showConfirmDialog(null, "Está ativo", "Escolha uma opção", JOptionPane.YES_NO_OPTION);
-		return null;
+		String numero = JOptionPane.showInputDialog("Informe o nï¿½mero do telefone");
+		int respostaMovel = JOptionPane.showConfirmDialog(null, "Ã‰ um telefone mÃ³vel", "Escolha uma opÃ§Ã£o", JOptionPane.YES_NO_OPTION);
+		int respostaAtivo = JOptionPane.showConfirmDialog(null, "EstÃ¡ ativo", "Escolha uma opÃ§Ã£o", JOptionPane.YES_NO_OPTION);
+		
+		boolean ativo = true;
+		boolean movel = true;
+		if(respostaMovel == 0) {
+			movel = true; 
+		} else if(respostaMovel == 1) {
+			movel = false;
+		}
+		
+		if(respostaAtivo == 0) {
+			ativo = true;
+		} else if(respostaAtivo == 1) {
+			ativo = false;
+		}
+		
+		Telefone novoTelefone = new Telefone(codigoDoPais, ddd, numero, movel, ativo);
+		
+		return novoTelefone;
 	}
-	
+		
 }

@@ -16,7 +16,7 @@ public class ClienteBO {
 		
 		if(dao.cpfJaUtilizado(cliente.getCpf())) {
 			mensagem = "CPF informado (" + cliente.getCpf() + ") já foi utilizado";
-		}else {
+		} else {
 			cliente = dao.salvar(cliente);
 			
 			if(cliente.getId() > 0) {
