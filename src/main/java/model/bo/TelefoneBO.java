@@ -11,7 +11,7 @@ public class TelefoneBO {
 		String mensagem = "";
 		
 		if(dao.telefoneJaCadastrado(telefone)) {
-			mensagem = "Telefone j√° cadastrado";
+			mensagem = "Telefone j· cadastrado";
 		} else {		
 			telefone = dao.salvar(telefone);
 			
