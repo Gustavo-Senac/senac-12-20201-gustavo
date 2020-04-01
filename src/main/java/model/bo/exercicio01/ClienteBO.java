@@ -1,7 +1,7 @@
-package model.bo;
+package model.bo.exercicio01;
 
 import model.dao.exercicio01.ClienteDAO;
-import model.vo.exercicio01.Cliente;
+import model.vo.exercicio01.ClienteVO;
 
 public class ClienteBO {
 
@@ -11,7 +11,7 @@ public class ClienteBO {
 	 * @param cliente o Cliente a ser salvo no banco
 	 * @return
 	 */
-	public String salvar(Cliente cliente) {
+	public String salvar(ClienteVO cliente) {
 		String mensagem = "";
 		
 		if(dao.cpfJaUtilizado(cliente.getCpf())) {

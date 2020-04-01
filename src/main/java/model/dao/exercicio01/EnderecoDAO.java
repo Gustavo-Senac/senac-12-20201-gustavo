@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 import model.dao.Banco;
 import model.dao.BaseDAO;
-import model.vo.exercicio01.Endereco;
+import model.vo.exercicio01.EnderecoVO;
 
-public class EnderecoDAO implements BaseDAO<Endereco>{
+public class EnderecoDAO implements BaseDAO<EnderecoVO>{
 
-	public Endereco salvar(Endereco novaEntidade) {
+	public EnderecoVO salvar(EnderecoVO novaEntidade) {
 		//Conectar no banco
 		Connection conexao = Banco.getConnection();
 		
@@ -33,32 +33,44 @@ public class EnderecoDAO implements BaseDAO<Endereco>{
 			ResultSet resultado = statement.getGeneratedKeys();
 			
 			if(resultado.next()) {
-				//Incluir a chave gerada na novaEntidade (coluna de posição 1)
+				//Incluir a chave gerada na novaEntidade (coluna de posiï¿½ï¿½o 1)
 				novaEntidade.setId(resultado.getInt(1));
 			}
 		} catch (SQLException e) {
-			System.out.println(" Erro ao salvar novo endereço. Causa: " + e.getMessage());
+			System.out.println(" Erro ao salvar novo endereï¿½o. Causa: " + e.getMessage());
 		}
 		 
 		return novaEntidade;
 	}
 
 	public boolean excluir(int id) {
+		String sql = " DELETE FROM endereco WHERE id = ?";
+
+		Connection conexao = Banco.getConnection();
+		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
+		boolean excluiu = false;
+		try {
+			preparedStatement.setInt(1, id);
+			int codigoRetornoUpdate = preparedStatement.executeUpdate();
+
+			excluiu = (codigoRetornoUpdate == Banco.CODIGO_RETORNO_SUCESSO_EXCLUSAO);
+		} catch (SQLException ex) {
+			System.out.println(" Erro ao excluir endereÃ§o. Id: " + id + " .Causa: " + ex.getMessage());
+		}
+		return excluiu;
+	}
+
+	public boolean alterar(EnderecoVO entidade) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public boolean alterar(Endereco entidade) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public Endereco consultarPorId(int id) {
+	public EnderecoVO consultarPorId(int id) {
 		String sql = " SELECT * FROM endereco WHERE id = ?";
 		
 		Connection conexao = Banco.getConnection();
 		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
-		Endereco enderecoConsultado = null;
+		EnderecoVO enderecoConsultado = null;
 		try {
 			preparedStatement.setInt(1, id);
 			ResultSet conjuntoResultante = preparedStatement.executeQuery();
@@ -67,14 +79,14 @@ public class EnderecoDAO implements BaseDAO<Endereco>{
 				enderecoConsultado = construirEnderecoDoResultSet(conjuntoResultante);
 			}
 		} catch (SQLException ex) {
-			System.out.println(" Erro ao consultar endereço. Id: " + id 
+			System.out.println(" Erro ao consultar endereï¿½o. Id: " + id 
 					+ " .Causa: " + ex.getMessage());
 		}
 		return enderecoConsultado;
 	}
 
-	private Endereco construirEnderecoDoResultSet(ResultSet conjuntoResultante) {
-		Endereco e = new Endereco();
+	private EnderecoVO construirEnderecoDoResultSet(ResultSet conjuntoResultante) {
+		EnderecoVO e = new EnderecoVO();
 		try {
 			e.setId(conjuntoResultante.getInt("id"));
 			e.setCep(conjuntoResultante.getString("cep"));
@@ -84,28 +96,45 @@ public class EnderecoDAO implements BaseDAO<Endereco>{
 			e.setRua(conjuntoResultante.getString("rua"));
 			e.setNumero(conjuntoResultante.getString("numero"));
 		} catch (SQLException ex) {
-			System.out.println(" Erro ao construir endereço a partir do ResultSet. Causa: " + ex.getMessage());
+			System.out.println(" Erro ao construir endereï¿½o a partir do ResultSet. Causa: " + ex.getMessage());
 		}
 		return e;
 	}
 
-	public ArrayList<Endereco> consultarTodos() {
+	public ArrayList<EnderecoVO> consultarTodos() {
 		String sql = " SELECT * FROM endereco ";
 
 		Connection conexao = Banco.getConnection();
 		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
-		ArrayList<Endereco> enderecos = new ArrayList<Endereco>();
+		ArrayList<EnderecoVO> enderecos = new ArrayList<EnderecoVO>();
 		try {
 			ResultSet conjuntoResultante = preparedStatement.executeQuery();
 
 			while(conjuntoResultante.next()) {
-				Endereco enderecoConsultado = construirEnderecoDoResultSet(conjuntoResultante);
+				EnderecoVO enderecoConsultado = construirEnderecoDoResultSet(conjuntoResultante);
 				enderecos.add(enderecoConsultado);
 			}
 		} catch (SQLException ex) {
-			System.out.println(" Erro ao consultar endereços. Causa: " + ex.getMessage());
+			System.out.println(" Erro ao consultar endereï¿½os. Causa: " + ex.getMessage());
 		}
 		return enderecos;
+	}
+
+	public boolean temEnderecoCadastradoComId(int idSelecionado) {
+		String sql = " SELECT id FROM endereco WHERE id = " + idSelecionado;
+
+		Connection conexao = Banco.getConnection();
+		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
+
+		boolean enderecoJaCadastrado = false;
+		try {
+			ResultSet conjuntoResultante = preparedStatement.executeQuery();
+			enderecoJaCadastrado = conjuntoResultante.next();
+		} catch (SQLException ex) {
+			System.out.println(" Erro ao verificar se endereÃ§o consta no banco. Causa: " + ex.getMessage());
+		}
+
+		return enderecoJaCadastrado;
 	}
 
 }

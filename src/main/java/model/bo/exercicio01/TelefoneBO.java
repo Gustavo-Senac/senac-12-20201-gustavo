@@ -1,17 +1,17 @@
-package model.bo;
+package model.bo.exercicio01;
 
 import model.dao.exercicio01.TelefoneDAO;
-import model.vo.exercicio01.Telefone;
+import model.vo.exercicio01.TelefoneVO;
 
 public class TelefoneBO {
 
 	private TelefoneDAO dao = new TelefoneDAO();
 
-	public String salvar(Telefone telefone) {
+	public String salvar(TelefoneVO telefone) {
 		String mensagem = "";
 		
 		if(dao.telefoneJaCadastrado(telefone)) {
-			mensagem = "Telefone j· cadastrado";
+			mensagem = "Telefone j√° cadastrado";
 		} else {		
 			telefone = dao.salvar(telefone);
 			

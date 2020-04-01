@@ -8,13 +8,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.dao.Banco;
-import model.vo.exercicio01.Cliente;
-import model.vo.exercicio01.Endereco;
-import model.vo.exercicio01.Telefone;
+import model.vo.exercicio01.ClienteVO;
+import model.vo.exercicio01.EnderecoVO;
+import model.vo.exercicio01.TelefoneVO;
 
 public class ClienteDAO {
 
-	public Cliente salvar(Cliente novoCliente) {
+	public ClienteVO salvar(ClienteVO novoCliente) {
 		Connection conexao = Banco.getConnection();
 		String sql = " INSERT INTO CLIENTE(NOME, SOBRENOME, CPF, IDENDERECO) "
 				+ " VALUES (?,?,?,?)";
@@ -36,7 +36,7 @@ public class ClienteDAO {
 			
 			// TODO ao salvar um cliente temos que marcar os telefones que ele possui!
 		} catch (SQLException e) {
-			System.out.println("Erro ao inserir novo endereÁo.");
+			System.out.println("Erro ao inserir novo cliente.");
 			System.out.println("Erro: " + e.getMessage());
 		}
 		
@@ -62,7 +62,7 @@ public class ClienteDAO {
 		return quantidadeLinhasAfetadas > 0;
 	}
 
-	public boolean alterar(Cliente cliente) {
+	public boolean alterar(ClienteVO cliente) {
 		Connection conexao = Banco.getConnection();
 		String sql = " UPDATE CLIENTE"
 				+ "SET NOME=?, SOBRENOME=?, CPF=?, IDENDERECO=? "
@@ -87,21 +87,21 @@ public class ClienteDAO {
 		return registrosAlterados > 0;
 	}
 
-	public Cliente consultarPorId(int id) {
+	public ClienteVO consultarPorId(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public ArrayList<Cliente> consultarTodos() {
+	public ArrayList<ClienteVO> consultarTodos() {
 		Connection conexao = Banco.getConnection();
 		String sql = " SELECT * FROM CLIENTE ";
 		PreparedStatement stmt = Banco.getPreparedStatement(conexao, sql);
 		
-		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+		ArrayList<ClienteVO> clientes = new ArrayList<ClienteVO>();
 		try {
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
-				Cliente c = construirClienteDoResultSet(rs);
+				ClienteVO c = construirClienteDoResultSet(rs);
 				clientes.add(c);
 			}
 			
@@ -122,8 +122,8 @@ public class ClienteDAO {
 	 * @return um objeto do tipo Cliente
 	 * 
 	 */
-	private Cliente construirClienteDoResultSet(ResultSet rs) {
-		Cliente c = new Cliente();
+	private ClienteVO construirClienteDoResultSet(ResultSet rs) {
+		ClienteVO c = new ClienteVO();
 		try {
 			c.setId(rs.getInt("id"));
 			c.setNome(rs.getString("nome"));
@@ -131,11 +131,11 @@ public class ClienteDAO {
 			c.setCpf(rs.getString("cpf"));
 
 			EnderecoDAO enderecoDAO = new EnderecoDAO();
-			Endereco end = enderecoDAO.consultarPorId(rs.getInt("idendereco"));
+			EnderecoVO end = enderecoDAO.consultarPorId(rs.getInt("idendereco"));
 			c.setEndereco(end);
 			
 			TelefoneDAO telefoneDAO = new TelefoneDAO();
-			ArrayList<Telefone> telefones = telefoneDAO.consultarTodosPorIdCliente(rs.getInt("id"));
+			ArrayList<TelefoneVO> telefones = telefoneDAO.consultarTodosPorIdCliente(rs.getInt("id"));
 			c.setTelefones(telefones);
 		} catch (SQLException e) {
 			System.out.println("Erro ao construir cliente a partir do ResultSet. Causa: " + e.getMessage());
@@ -156,7 +156,7 @@ public class ClienteDAO {
 			ResultSet rs = stmt.executeQuery();
 			cpfUsado = rs.next();
 		} catch (SQLException e) {
-			System.out.println("Erro ao verificar se CPF j· foi usado. Causa: " + e.getMessage());
+			System.out.println("Erro ao verificar se CPF j√° foi usado. Causa: " + e.getMessage());
 		}
 		
 		return cpfUsado;

@@ -8,12 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import model.dao.Banco;
-import model.vo.exercicio01.Cliente;
-import model.vo.exercicio01.Telefone;
+import model.vo.exercicio01.ClienteVO;
+import model.vo.exercicio01.TelefoneVO;
 
 public class TelefoneDAO {
 
-	public Telefone salvar(Telefone novoTelefone) {
+	public TelefoneVO salvar(TelefoneVO novoTelefone) {
 		
 		Connection conn = Banco.getConnection();
 		String sql = "INSERT INTO TELEFONE (codigoPais, ddd, numero, movel, idCliente, ativo) "
@@ -70,8 +70,8 @@ public class TelefoneDAO {
 	 * @param dono      o cliente que possui os telefones
 	 * @param telefones a lista de telefones
 	 */
-	public void ativarTelefones(Cliente dono, ArrayList<Telefone> telefones) {
-		for (Telefone t : telefones) {
+	public void ativarTelefones(ClienteVO dono, ArrayList<TelefoneVO> telefones) {
+		for (TelefoneVO t : telefones) {
 			t.setDono(dono);
 			t.setAtivo(true);
 			if (t.getId() > 0) {
@@ -104,7 +104,7 @@ public class TelefoneDAO {
 		}
 	}
 
-	public boolean alterar(Telefone telefone) {
+	public boolean alterar(TelefoneVO telefone) {
 		Connection conn = Banco.getConnection();
 		String sql = " UPDATE TELEFONE " + " SET codigoPais=?, ddd=?, numero=?, tipoLinha=?, idCliente=?, ativo=? "
 				+ " WHERE ID=? ";
@@ -133,14 +133,14 @@ public class TelefoneDAO {
 		return quantidadeLinhasAfetadas > 0;
 	}
 
-	public Telefone consultarPorId(int id) {
+	public TelefoneVO consultarPorId(int id) {
 		Connection conn = Banco.getConnection();
 		String sql = " SELECT id, codigoPais, ddd, numero, movel, idCliente, ativo " + " FROM TELEFONE "
 				+ " WHERE ID=" + id;
 
 		Statement stmt = Banco.getStatement(conn);
 
-		Telefone telefone = null;
+		TelefoneVO telefone = null;
 		try {
 			ResultSet resultadoDaConsulta = stmt.executeQuery(sql);
 
@@ -156,17 +156,17 @@ public class TelefoneDAO {
 		return telefone;
 	}
 
-	public ArrayList<Telefone> consultarTodos() {
+	public ArrayList<TelefoneVO> consultarTodos() {
 		Connection conn = Banco.getConnection();
 		String sql = " SELECT id, codigoPais, ddd, numero, movel, idCliente, ativo " + " FROM TELEFONE ";
 
 		Statement stmt = Banco.getStatement(conn);
-		ArrayList<Telefone> telefones = new ArrayList<Telefone>();
+		ArrayList<TelefoneVO> telefones = new ArrayList<TelefoneVO>();
 		try {
 			ResultSet resultadoDaConsulta = stmt.executeQuery(sql);
 
 			while (resultadoDaConsulta.next()) {
-				Telefone telefone = construirTelefoneDoResultSet(resultadoDaConsulta);
+				TelefoneVO telefone = construirTelefoneDoResultSet(resultadoDaConsulta);
 				telefones.add(telefone);
 			}
 
@@ -178,18 +178,18 @@ public class TelefoneDAO {
 		return telefones;
 	}
 
-	public ArrayList<Telefone> consultarTodosPorIdCliente(int idCliente) {
+	public ArrayList<TelefoneVO> consultarTodosPorIdCliente(int idCliente) {
 		Connection conn = Banco.getConnection();
 		String sql = " SELECT id, codigoPais, ddd, numero, movel, idCliente, ativo " + " FROM TELEFONE "
 				+ " WHERE IDCLIENTE = " + idCliente;
 
 		Statement stmt = Banco.getStatement(conn);
-		ArrayList<Telefone> telefones = new ArrayList<Telefone>();
+		ArrayList<TelefoneVO> telefones = new ArrayList<TelefoneVO>();
 		try {
 			ResultSet resultadoDaConsulta = stmt.executeQuery(sql);
 
 			while (resultadoDaConsulta.next()) {
-				Telefone telefone = construirTelefoneDoResultSet(resultadoDaConsulta);
+				TelefoneVO telefone = construirTelefoneDoResultSet(resultadoDaConsulta);
 				telefones.add(telefone);
 			}
 
@@ -210,14 +210,14 @@ public class TelefoneDAO {
 	 * @return um objeto do tipo Telefone
 	 * 
 	 */
-	private Telefone construirTelefoneDoResultSet(ResultSet resultadoDaConsulta) {
-		Telefone telefone;
-		telefone = new Telefone();
+	private TelefoneVO construirTelefoneDoResultSet(ResultSet resultadoDaConsulta) {
+		TelefoneVO telefone;
+		telefone = new TelefoneVO();
 		try {
 			telefone.setId(resultadoDaConsulta.getInt("id"));
 
 			ClienteDAO cDAO = new ClienteDAO();
-			Cliente donoDoTelefone = cDAO.consultarPorId(resultadoDaConsulta.getInt("idCliente"));
+			ClienteVO donoDoTelefone = cDAO.consultarPorId(resultadoDaConsulta.getInt("idCliente"));
 			telefone.setDono(donoDoTelefone);
 			telefone.setCodigoPais(resultadoDaConsulta.getString("codigoPais"));
 			telefone.setDdd(resultadoDaConsulta.getString("ddd"));
@@ -232,7 +232,7 @@ public class TelefoneDAO {
 		return telefone;
 	}
 
-	public boolean telefoneJaCadastrado(Telefone novoTelefone) {
+	public boolean telefoneJaCadastrado(TelefoneVO novoTelefone) {
 		String sql = " SELECT ID FROM TELEFONE T " 
 				+ " WHERE T.CODIGOPAIS = " + novoTelefone.getCodigoPais()
 				+ " AND T.DDD = " + novoTelefone.getDdd() 

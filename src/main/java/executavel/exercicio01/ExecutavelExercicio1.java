@@ -4,13 +4,13 @@ import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import model.bo.ClienteBO;
-import model.bo.TelefoneBO;
+import model.bo.exercicio01.ClienteBO;
+import model.bo.exercicio01.TelefoneBO;
 import model.dao.exercicio01.ClienteDAO;
 import model.dao.exercicio01.EnderecoDAO;
-import model.vo.exercicio01.Cliente;
-import model.vo.exercicio01.Telefone;
-import model.vo.exercicio01.Endereco;
+import model.vo.exercicio01.ClienteVO;
+import model.vo.exercicio01.TelefoneVO;
+import model.vo.exercicio01.EnderecoVO;
 
 public class ExecutavelExercicio1 {
 
@@ -40,7 +40,7 @@ public class ExecutavelExercicio1 {
 		JOptionPane.showMessageDialog(null, mensagem);*/
 		
 		
-		Telefone telefone1 = obterTelefoneDaTelaComCliente();
+		TelefoneVO telefone1 = obterTelefoneDaTelaComCliente();
 		
 		TelefoneBO telefoneBO = new TelefoneBO();
 		String mensagem = telefoneBO.salvar(telefone1);
@@ -49,14 +49,14 @@ public class ExecutavelExercicio1 {
 		
 	}
 	
-	private static Telefone obterTelefoneDaTelaComCliente() {
-		Telefone novoTelefone = ExecutavelExercicio1.obterTelefoneDaTela();
+	private static TelefoneVO obterTelefoneDaTelaComCliente() {
+		TelefoneVO novoTelefone = ExecutavelExercicio1.obterTelefoneDaTela();
 		
 		ClienteDAO clienteDAO = new ClienteDAO();
-		ArrayList<Cliente> listaClientes = clienteDAO.consultarTodos();
+		ArrayList<ClienteVO> listaClientes = clienteDAO.consultarTodos();
 		
 		Object[] clientes = listaClientes.toArray();
-		Cliente clienteSelecionado = (Cliente) JOptionPane.showInputDialog(null,
+		ClienteVO clienteSelecionado = (ClienteVO) JOptionPane.showInputDialog(null,
 				"Selecione um cliente", "Lista Clientes",
 				JOptionPane.QUESTION_MESSAGE, null, clientes, null);
 		
@@ -65,32 +65,32 @@ public class ExecutavelExercicio1 {
 		return novoTelefone;
 	}
 
-	private static Cliente obterClienteDaTela() {
+	private static ClienteVO obterClienteDaTela() {
 		String nome = JOptionPane.showInputDialog("Informe o nome");
 		String sobrenome = JOptionPane.showInputDialog("Informe o sobrenome");
 		String cpf = JOptionPane.showInputDialog("Informe o CPF");
 
 		EnderecoDAO endDAO = new EnderecoDAO();
-		ArrayList<Endereco> listaEnderecos = endDAO.consultarTodos();
+		ArrayList<EnderecoVO> listaEnderecos = endDAO.consultarTodos();
 		
 		Object[] enderecos = listaEnderecos.toArray();
-		Endereco enderecoSelecionado = (Endereco) JOptionPane.showInputDialog(null, 
-				"Selecione um endereço", "Endereço", 
+		EnderecoVO enderecoSelecionado = (EnderecoVO) JOptionPane.showInputDialog(null, 
+				"Selecione um endereï¿½o", "Endereï¿½o", 
 				JOptionPane.QUESTION_MESSAGE, 
 				null, enderecos, null);
 
-		Cliente novoCliente = new Cliente(nome, sobrenome, cpf, 
-				new ArrayList<Telefone>(), enderecoSelecionado);
+		ClienteVO novoCliente = new ClienteVO(nome, sobrenome, cpf, 
+				new ArrayList<TelefoneVO>(), enderecoSelecionado);
 
 		return novoCliente;
 	}
 	
-	private static Telefone obterTelefoneDaTela() {
-		String codigoDoPais = JOptionPane.showInputDialog("Informe o código do país");
+	private static TelefoneVO obterTelefoneDaTela() {
+		String codigoDoPais = JOptionPane.showInputDialog("Informe o cï¿½digo do paï¿½s");
 		String ddd = JOptionPane.showInputDialog("Informe o DDD");
-		String numero = JOptionPane.showInputDialog("Informe o número do telefone");
-		int respostaMovel = JOptionPane.showConfirmDialog(null, "É um telefone móvel", "Escolha uma opção", JOptionPane.YES_NO_OPTION);
-		int respostaAtivo = JOptionPane.showConfirmDialog(null, "Está ativo", "Escolha uma opção", JOptionPane.YES_NO_OPTION);
+		String numero = JOptionPane.showInputDialog("Informe o nï¿½mero do telefone");
+		int respostaMovel = JOptionPane.showConfirmDialog(null, "ï¿½ um telefone mï¿½vel", "Escolha uma opï¿½ï¿½o", JOptionPane.YES_NO_OPTION);
+		int respostaAtivo = JOptionPane.showConfirmDialog(null, "Estï¿½ ativo", "Escolha uma opï¿½ï¿½o", JOptionPane.YES_NO_OPTION);
 		
 		boolean ativo = true;
 		boolean movel = true;
@@ -106,7 +106,7 @@ public class ExecutavelExercicio1 {
 			ativo = false;
 		}
 		
-		Telefone novoTelefone = new Telefone(codigoDoPais, ddd, numero, movel, ativo);
+		TelefoneVO novoTelefone = new TelefoneVO(codigoDoPais, ddd, numero, movel, ativo);
 		
 		return novoTelefone;
 	}
