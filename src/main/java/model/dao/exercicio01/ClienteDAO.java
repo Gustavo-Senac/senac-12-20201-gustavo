@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import model.dao.Banco;
@@ -88,7 +89,23 @@ public class ClienteDAO {
 	}
 
 	public ClienteVO consultarPorId(int id) {
-		// TODO Auto-generated method stub
+		/*String sql = " SELECT * FROM cliente WHERE id = ?";
+		
+		Connection conexao = Banco.getConnection();
+		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
+		ClienteVO clienteConsultado = null;
+		try {
+			preparedStatement.setInt(1, id);
+			ResultSet conjuntoResultante = preparedStatement.executeQuery();
+			
+			if(conjuntoResultante.next()) {
+				clienteConsultado = construirClienteDoResultSet(conjuntoResultante);
+			}
+		} catch (SQLException ex) {
+			System.out.println(" Erro ao consultar o cliente. Id: " + id 
+					+ " .Causa: " + ex.getMessage());
+		}
+		return clienteConsultado;*/
 		return null;
 	}
 
@@ -160,6 +177,26 @@ public class ClienteDAO {
 		}
 		
 		return cpfUsado;
+	}
+
+	public ClienteVO consultarPorCpf(String cpf) {
+		String sql = " SELECT * FROM cliente WHERE cpf = ?";
+		
+		Connection conexao = Banco.getConnection();
+		PreparedStatement preparedStatement = Banco.getPreparedStatement(conexao, sql);
+		ClienteVO clienteConsultado = null;
+		try {
+			preparedStatement.setString(1, cpf);
+			ResultSet conjuntoResultante = preparedStatement.executeQuery();
+			
+			if(conjuntoResultante.next()) {
+				clienteConsultado = construirClienteDoResultSet(conjuntoResultante);
+			}
+		} catch (SQLException ex) {
+			System.out.println(" Erro ao consultar cliente. Cpf: " + cpf
+					+ " .Causa: " + ex.getMessage());
+		}
+		return clienteConsultado;		
 	}
 
 }

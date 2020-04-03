@@ -6,6 +6,14 @@ import model.vo.exercicio01.TelefoneVO;
 public class TelefoneController {
 
 	private TelefoneBO bo = new TelefoneBO();
+	
+	private static final int TAMANHO_MINIMO_CAMPO_CODIGO_PAIS = 1;
+	private static final int TAMANHO_MAXIMO_CAMPO_CODIGO_PAIS = 4;
+	private static final int TAMANHO_MINIMO_CAMPO_DDD = 2;
+	private static final int TAMANHO_MAXIMO_CAMPO_DDD = 3;
+	private static final int TAMANHO_MINIMO_CAMPO_NUMERO = 7;
+	private static final int TAMANHO_MAXIMO_CAMPO_NUMERO = 11;
+
 
 	/**
 	 * Salva um novo telefone, validando os valores informados
@@ -32,30 +40,41 @@ public class TelefoneController {
 		String mensagem = "";
 
 		if (novoTelefone == null) {
-			mensagem = "Telefone não foi criado";
-		} else {
-			if (novoTelefone.getDdd().trim().length() != 2) {
-				mensagem += "Informe o DDD com 2 dígitos \n";
-			}
-
-			try {
-				Integer.parseInt(novoTelefone.getDdd());
-			} catch (NumberFormatException ex) {
-				mensagem += "O DDD deve ser um NÚMERO";
-			}
+			return "Telefone não foi criado";
 		}
+			
+		try {
+			Integer.parseInt(novoTelefone.getCodigoPais());
+			Integer.parseInt(novoTelefone.getDdd());
+			Integer.parseInt(novoTelefone.getNumero());
+			
+		} catch (NumberFormatException ex) {
+			mensagem += "Todos os campos devem ser números";
+		}
+			
+		mensagem += validarCampoNumerico("Código do país", novoTelefone.getCodigoPais(), TAMANHO_MINIMO_CAMPO_CODIGO_PAIS, TAMANHO_MAXIMO_CAMPO_CODIGO_PAIS);
+		mensagem += validarCampoNumerico("DDD", novoTelefone.getDdd(), TAMANHO_MINIMO_CAMPO_DDD, TAMANHO_MAXIMO_CAMPO_DDD);
+		mensagem += validarCampoNumerico("Número", novoTelefone.getNumero(), TAMANHO_MINIMO_CAMPO_NUMERO, TAMANHO_MAXIMO_CAMPO_NUMERO);
 
-		// TODO fazer mais validações
-		// Numero
-
-		// Codigo pais
+		if (mensagem.isEmpty()) {
+			mensagem = bo.salvar(novoTelefone);
+		}
+		
 		return mensagem;
 	}
 
 	private String validarCampoNumerico(String valorDoCampo, String nomeDoCampo, int tamanhoMinimo, int tamanhoMaximo) {
-		// TODO desenvolver
-
-		return "";
+		String mensagemValidacao = "";
+	
+		if (valorDoCampo != null && !valorDoCampo.isEmpty() 
+					|| valorDoCampo.length() < tamanhoMinimo 
+					|| valorDoCampo.length() > tamanhoMaximo) {
+				mensagemValidacao = nomeDoCampo + " deve possuir pelo menos " + tamanhoMinimo + " e no máximo "
+						+ tamanhoMaximo + " caracteres \n";
+			}
+	
+		return mensagemValidacao;
+		
 	}
 
 	

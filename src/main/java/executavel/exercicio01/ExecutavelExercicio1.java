@@ -86,11 +86,11 @@ public class ExecutavelExercicio1 {
 	}
 	
 	private static TelefoneVO obterTelefoneDaTela() {
-		String codigoDoPais = JOptionPane.showInputDialog("Informe o c�digo do pa�s");
+		String codigoDoPais = JOptionPane.showInputDialog("Informe o código do país");
 		String ddd = JOptionPane.showInputDialog("Informe o DDD");
-		String numero = JOptionPane.showInputDialog("Informe o n�mero do telefone");
-		int respostaMovel = JOptionPane.showConfirmDialog(null, "� um telefone m�vel", "Escolha uma op��o", JOptionPane.YES_NO_OPTION);
-		int respostaAtivo = JOptionPane.showConfirmDialog(null, "Est� ativo", "Escolha uma op��o", JOptionPane.YES_NO_OPTION);
+		String numero = JOptionPane.showInputDialog("Informe o número do telefone");
+		int respostaMovel = JOptionPane.showConfirmDialog(null, "É um telefone móvel", "Escolha uma opção", JOptionPane.YES_NO_OPTION);
+		int respostaAtivo = JOptionPane.showConfirmDialog(null, "Está ativo", "Escolha uma opção", JOptionPane.YES_NO_OPTION);
 		
 		boolean ativo = true;
 		boolean movel = true;
