@@ -1,10 +1,14 @@
 package controller.exercicio01;
 
+import java.util.ArrayList;
+
 import model.bo.exercicio01.TelefoneBO;
+import model.dao.exercicio01.TelefoneDAO;
 import model.vo.exercicio01.TelefoneVO;
 
 public class TelefoneController {
 
+	private TelefoneDAO dao = new TelefoneDAO();
 	private TelefoneBO bo = new TelefoneBO();
 	
 	private static final int TAMANHO_MINIMO_CAMPO_CODIGO_PAIS = 1;
@@ -75,6 +79,10 @@ public class TelefoneController {
 	
 		return mensagemValidacao;
 		
+	}
+
+	public ArrayList<TelefoneVO> listarTodosOsTelefones() {
+		return dao.consultarTodos();
 	}
 
 	
